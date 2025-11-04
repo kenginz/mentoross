@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentorOS - Eğitimciler İçin Tek İşletim Sistemi</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #4F46E5; /* Indigo-600 */
+            --primary-dark: #4338CA; /* Indigo-700 */
+            --primary-light: #EEF2FF; /* Indigo-50 */
+            --secondary: #14B8A6; /* Teal-500 */
+            --secondary-light: #F0FDFA; /* Teal-50 */
+            --text-primary: #111827; /* Gray-900 */
+            --text-secondary: #4B5563; /* Gray-600 */
+            --bg-light: #F9FAFB; /* Gray-50 */
+            --bg-white: #FFFFFF;
+        }
+        body {
+            /* Font yüklenmediğinde yedek sistem fontlarını kullanmak için iyileştirildi */
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-white);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .text-primary { color: var(--primary); }
+        .bg-primary { background-color: var(--primary); }
+        .bg-secondary { background-color: var(--secondary); }
+        .border-primary { border-color: var(--primary); }
+        .text-secondary { color: var(--secondary); }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-light); }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+        /* Glassmorphism Header */
+        .header-glass {
+            background-color: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        /* Custom Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px 0 rgba(79, 70, 229, 0.35);
+        }
+        .btn-secondary {
+            background-color: var(--bg-white);
+            color: var(--text-primary);
+            border: 1px solid #D1D5DB; /* Gray-300 */
+        }
+        .btn-secondary:hover {
+            background-color: var(--bg-light);
+            border-color: #9CA3AF; /* Gray-400 */
+        }
+        .btn-secondary-color {
+            background-color: var(--secondary-light);
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        .btn-secondary-color:hover {
+            background-color: #CCFBF1; /* Teal-100 */
+        }
+
+        /* Feature Card Icon */
+        .feature-icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 0.75rem;
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+         .feature-icon-secondary {
+            background-color: var(--secondary-light);
+            color: var(--secondary);
+        }
+
+        /* Pricing Toggle */
+        .pricing-toggle {
+            display: inline-flex;
+            background-color: #F3F4F6; /* Gray-100 */
+            border-radius: 9999px;
+            padding: 0.25rem;
+        }
+        .pricing-toggle button {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+        }
+        .pricing-toggle button.active {
+            background-color: var(--bg-white);
+            color: var(--primary);
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- 1. Header / Navigation (Glassmorphism) -->
+    <header class="sticky top-0 z-50 w-full header-glass">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 md:h-20">
+                <!-- Logo -->
+                <a href="#" class="text-3xl font-extrabold text-primary">MentorOS</a>
+                
+                <!-- Nav Links -->
+                <nav class="hidden md:flex space-x-10">
+                    <a href="#ozellikler" class="font-medium text-gray-600 hover:text-primary transition duration-150">Özellikler</a>
+                    <a href="#fiyatlandirma" class="font-medium text-gray-600 hover:text-primary transition duration-150">Fiyatlandırma</a>
+                    <a href="#kurumlar" class="font-medium text-gray-600 hover:text-primary transition duration-150">Kurumlar</a>
+                    <a href="#yorumlar" class="font-medium text-gray-600 hover:text-primary transition duration-150">Kullanıcı Yorumları</a>
+                </nav>
+                
+                <!-- CTA Button -->
+                <div class="flex items-center space-x-4">
+                    <a href="#" class="hidden sm:inline-block text-sm font-medium text-gray-600 hover:text-primary">Giriş Yap</a>
+                    <a href="#" class="btn btn-primary">
+                        Ücretsiz Başla
+                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. Hero Section (Asymmetrical) -->
+    <main>
+        <section class="relative py-24 md:py-32 lg:py-40">
+            <!-- Arka Plan Gradyan -->
+            <div class="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white to-gray-50 -z-10"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Sol Taraf: Metin ve CTA -->
+                <div class="text-center lg:text-left space-y-8">
+                    <h1 class="text-5xl md:text-7xl font-extrabold leading-tight tracking-tight text-text-primary">
+                        Eğitimciler İçin <span class="text-primary">Tek İşletim Sistemi.</span>
+                    </h1>
+                    <p class="text-xl md:text-2xl text-text-secondary max-w-2xl mx-auto lg:mx-0">
+                        Yönetime Değil, Eğitime Odaklanın. Canlı ders, ödeme, ödev ve içerik korumayı tek bir platformda birleştirin.
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#" class="btn btn-primary btn-secondary-color text-lg px-8 py-3">
+                            <i data-lucide="zap" class="w-5 h-5 mr-2"></i>
+                            Ücretsiz Denemeyi Başlat
+                        </a>
+                        <a href="#kurumlar" class="btn btn-secondary text-lg px-8 py-3">
+                            Kurumlar İçin Demo Al
+                        </a>
+                    </div>
+                    <div class="pt-4 text-center lg:text-left">
+                        <span class="text-sm text-gray-500 font-medium">Türkiye'nin en hızlı büyüyen 2.000+ eğitimcisi bize güveniyor.</span>
+                        <!-- Güven Logoları (Placeholder) -->
+                        <div class="flex justify-center lg:justify-start space-x-6 mt-4 opacity-75">
+                            <i data-lucide="graduation-cap" class="w-8 h-8 text-gray-400" title="Pilot Okul"></i>
+                            <i data-lucide="globe" class="w-8 h-8 text-gray-400" title="Dil Okulu"></i>
+                            <i data-lucide="book-open-check" class="w-8 h-8 text-gray-400" title="YKS Kursu"></i>
+                            <i data-lucide="school" class="w-8 h-8 text-gray-400" title="Etüt Merkezi"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sağ Taraf: Görsel Mockup -->
+                <div class="relative">
+                    <img src="https://placehold.co/800x600/EEF2FF/4F46E5?text=MentorOS+Dashboard+Mockup" 
+                         alt="MentorOS Sanal Sınıf ve Finansal Panel Arayüzü" 
+                         class="rounded-3xl shadow-2xl relative z-10"/>
+                    <!-- Dekoratif şekiller -->
+                    <div class="absolute -bottom-8 -left-8 w-40 h-40 bg-secondary/20 rounded-full -z-10 blur-xl"></div>
+                    <div class="absolute -top-8 -right-8 w-40 h-40 bg-primary/20 rounded-full -z-10 blur-xl"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Gelişmiş "Önce / Sonra" Bölümü -->
+        <section class="py-24 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <span class="inline-block bg-primary-light text-primary text-sm font-semibold px-4 py-1 rounded-full mb-4">Araç Kaosuna Son</span>
+                    <h2 class="text-4xl lg:text-5xl font-extrabold mb-4">Dağınıklıktan Organize Bir Düzene</h2>
+                    <p class="text-xl text-text-secondary max-w-3xl mx-auto">Platformumuzun temel değeri, eğitimcinin tüm idari yükünü tek bir ekranda toplamasıdır.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <!-- Önce: Kaos -->
+                    <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+                        <h3 class="text-2xl font-bold text-center mb-6 text-red-600">ESKİ YÖNTEM (Haftada 3+ Saat Kayıp)</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center p-4 bg-gray-100 rounded-lg opacity-70">
+                                <i data-lucide="video" class="w-6 h-6 text-blue-500 mr-3"></i>
+                                <span class="font-medium text-gray-700">Canlı Ders için Zoom/Teams</span>
+                            </div>
+                            <div class="flex items-center p-4 bg-gray-100 rounded-lg opacity-70">
+                                <i data-lucide="message-circle" class="w-6 h-6 text-green-500 mr-3"></i>
+                                <span class="font-medium text-gray-700">İletişim için WhatsApp</span>
+                            </div>
+                            <div class="flex items-center p-4 bg-gray-100 rounded-lg opacity-70">
+                                <i data-lucide="folder-cog" class="w-6 h-6 text-yellow-500 mr-3"></i>
+                                <span class="font-medium text-gray-700">Ödev Takibi için Drive/E-posta</span>
+                            </div>
+                            <div class="flex items-center p-4 bg-gray-100 rounded-lg opacity-70">
+                                <i data-lucide="landmark" class="w-6 h-6 text-gray-500 mr-3"></i>
+                                <span class="font-medium text-gray-700">Ödeme Takibi için IBAN/Excel</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sonra: MentorOS -->
+                    <div class="bg-primary-dark p-8 rounded-2xl shadow-2xl">
+                        <h3 class="text-2xl font-bold text-center mb-6 text-white">MentorOS (Tek İşletim Sistemi)</h3>
+                         <div class="space-y-4">
+                            <div class="flex items-center p-4 bg-white/10 rounded-lg border border-white/20">
+                                <i data-lucide="check-circle-2" class="w-6 h-6 text-secondary mr-3"></i>
+                                <span class="font-medium text-white">Entegre Sanal Sınıf</span>
+                            </div>
+                            <div class="flex items-center p-4 bg-white/10 rounded-lg border border-white/20">
+                                <i data-lucide="check-circle-2" class="w-6 h-6 text-secondary mr-3"></i>
+                                <span class="font-medium text-white">Monetizasyon Motoru (Ödeme)</span>
+                            </div>
+                            <div class="flex items-center p-4 bg-white/10 rounded-lg border border-white/20">
+                                <i data-lucide="check-circle-2" class="w-6 h-6 text-secondary mr-3"></i>
+                                <span class="font-medium text-white">AI Destekli Akademi (Ödev/Analiz)</span>
+                            </div>
+                            <div class="flex items-center p-4 bg-white/10 rounded-lg border border-white/20">
+                                <i data-lucide="check-circle-2" class="w-6 h-6 text-secondary mr-3"></i>
+                                <span class="font-medium text-white">Güvenli İçerik Koruması (DRM)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Gelişmiş Özellikler Bölümü (3 Çekirdek) -->
+        <section id="ozellikler" class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl lg:text-5xl font-extrabold mb-4">Sadece Bir Araç Değil, Tam Bir Ekosistem</h2>
+                    <p class="text-xl text-text-secondary max-w-3xl mx-auto">MentorOS'un temelini oluşturan üç çekirdek modülü keşfedin.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Modül 1 -->
+                    <div class="p-8 bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100">
+                        <div class="feature-icon mb-5"><i data-lucide="presentation" class="w-6 h-6"></i></div>
+                        <h3 class="text-2xl font-bold mb-3 text-text-primary">Canlı Sanal Sınıf</h3>
+                        <p class="text-text-secondary">İnteraktif tahta, gecikmesiz HD yayın, anlık anketler ve otomatik grup odaları (breakout rooms) ile öğrenci etkileşimini zirveye taşıyın.</p>
+                    </div>
+                    <!-- Modül 2 -->
+                    <div class="p-8 bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100">
+                        <div class="feature-icon mb-5"><i data-lucide="wallet" class="w-6 h-6"></i></div>
+                        <h3 class="text-2xl font-bold mb-3 text-text-primary">Monetizasyon Motoru</h3>
+                        <p class="text-text-secondary">Ders ve içerik satışında %10'dan başlayan düşük komisyonlar. Abonelik yönetimi, gelir paneli ve 24 saatte hızlı ödeme.</p>
+                    </div>
+                    <!-- Modül 3 -->
+                    <div class="p-8 bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100">
+                        <div class="feature-icon mb-5"><i data-lucide="cpu" class="w-6 h-6"></i></div>
+                        <h3 class="text-2xl font-bold mb-3 text-text-primary">AI Destekli Akademi</h3>
+                        <p class="text-text-secondary">Yapay zeka destekli sınav oluşturucu, otomatik ödev notlandırma ve detaylı öğrenci performans analizi ile zaman kazanın.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Güvenlik (DRM) Vurgu Bölümü -->
+        <section id="guvenlik" class="py-24 bg-gray-900 text-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <!-- Sol: Metin -->
+                <div class="space-y-6">
+                    <span class="inline-block bg-secondary/20 text-secondary text-sm font-semibold px-4 py-1 rounded-full">GÜVENLİK ÖZELLİĞİ</span>
+                    <h2 class="text-4xl lg:text-5xl font-extrabold text-white">Emeğiniz Bizimle Güvende: Dijital Varlık Koruma (DRM)</h2>
+                    <p class="text-xl text-gray-300">En büyük endişenizin, ders kayıtlarınızın ve notlarınızın izinsiz dağıtılması olduğunu biliyoruz. MentorOS, bunu engellemek için tasarlandı.</p>
+                    
+                    <ul class="space-y-4 text-gray-200 text-lg">
+                        <li class="flex items-start"><i data-lucide="check-circle" class="w-6 h-6 text-secondary mr-3 flex-shrink-0 mt-1"></i> <strong>Görünmez Filigran:</strong> Her kullanıcıya özel, görünmez filigranlar ekleyerek sızıntı kaynağını tespit ederiz.</li>
+                        <li class="flex items-start"><i data-lucide="check-circle" class="w-6 h-6 text-secondary mr-3 flex-shrink-0 mt-1"></i> <strong>İndirme Engelleme:</strong> Videoların ve PDF'lerin indirilmesini engelleyerek sadece platform üzerinden erişimi zorunlu kılarız.</li>
+                        <li class="flex items-start"><i data-lucide="check-circle" class="w-6 h-6 text-secondary mr-3 flex-shrink-0 mt-1"></i> <strong>KVKK & GDPR:</strong> Tüm verileriniz en üst düzey bankacılık standartlarında şifrelenir ve korunur.</li>
+                    </ul>
+                </div>
+                <!-- Sağ: Görsel -->
+                <div class="flex justify-center items-center">
+                    <div class="p-16 bg-white/10 rounded-full">
+                        <i data-lucide="shield-check" class="w-64 h-64 text-secondary"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. Fiyatlandırma Bölümü (Gelişmiş) -->
+        <section id="fiyatlandirma" class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl lg:text-5xl font-extrabold mb-4">Kazancınız Üzerindeki Kontrolü Geri Alın</h2>
+                    <p class="text-xl text-text-secondary max-w-3xl mx-auto">İhtiyaçlarınıza uygun, basit ve şeffaf iki plan.</p>
+                    <!-- Aylık/Yıllık Toggle -->
+                    <div class="mt-8 pricing-toggle">
+                        <button class="active">Aylık</button>
+                        <button>Yıllık (%20 Tasarruf)</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto items-end">
+                    
+                    <!-- Lite Plan (Komisyon) -->
+                    <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+                        <h3 class="text-2xl font-bold mb-2 text-text-primary">MentorOS Lite</h3>
+                        <p class="text-text-secondary mb-6">Başlamak için harika</p>
+                        <div class="text-5xl font-extrabold mb-4">
+                            <span class="text-primary">%10</span>
+                            <span class="text-xl font-medium text-text-secondary">/satış</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-6">Sabit ücret yok, sadece satış yaptıkça ödeyin.</p>
+                        <a href="#" class="btn btn-secondary w-full text-center">Lite ile Başla</a>
+                        <ul class="mt-8 space-y-4 text-left text-text-secondary">
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-primary mr-2"></i> %10 Pazar Yeri Komisyonu</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-primary mr-2"></i> Ayda 50 saate kadar Canlı Ders</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-primary mr-2"></i> Temel Ödev Takibi</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-primary mr-2"></i> 10 GB İçerik Depolama</li>
+                        </ul>
+                    </div>
+
+                    <!-- Pro Plan (SaaS - Vurgulu) -->
+                    <div class="bg-white p-10 rounded-2xl shadow-2xl border-2 border-primary relative">
+                        <span class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-white text-xs font-bold px-4 py-1 rounded-full">EN POPÜLER</span>
+                        <h3 class="text-3xl font-bold mb-2 text-primary">MentorOS Pro</h3>
+                        <p class="text-text-secondary mb-6">İşini büyütenler için</p>
+                        <div class="text-5xl font-extrabold mb-4">
+                            <span class="text-text-primary">299 TL</span>
+                            <span class="text-xl font-medium text-text-secondary">/ay</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-6">Sıfır komisyon. Tüm kazanç sizin.</p>
+                        <a href="#" class="btn btn-primary w-full text-center">Pro'yu Deneyin</a>
+                        <ul class="mt-8 space-y-4 text-left text-text-secondary">
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-primary mr-2"></i> <strong>%0 Komisyon</strong> (Tüm Kazanç Sizin)</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-primary mr-2"></i> Sınırsız Canlı Ders ve Kayıt</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-primary mr-2"></i> AI Destekli Sınav Oluşturucu</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-primary mr-2"></i> Dijital Varlık Koruma (DRM)</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-primary mr-2"></i> Öncelikli Teknik Destek</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. Kurumlar Bölümü (B2B) -->
+        <section id="kurumlar" class="py-24 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <!-- Sol: Görsel -->
+                <div class="mt-10 lg:mt-0">
+                    <img src="https://placehold.co/600x500/1E293B/EEF2FF?text=Kurumsal+Y%C3%B6netici+Paneli" 
+                         alt="MentorOS Kurumsal Yönetim Paneli ve Dashboard görseli" 
+                         class="rounded-xl shadow-2xl"/>
+                </div>
+                <!-- Sağ: Metin -->
+                <div class="space-y-6">
+                    <span class="inline-block bg-secondary-light text-secondary text-sm font-semibold px-4 py-1 rounded-full">KURUMSAL ÇÖZÜM</span>
+                    <h2 class="text-4xl lg:text-5xl font-extrabold text-text-primary">Etüt Merkezleri ve Okullar İçin Ölçeklenebilir Çözüm</h2>
+                    <p class="text-xl text-text-secondary">Tüm öğretmenlerinizi, sınıflarınızı ve finansal süreçlerinizi tek bir çatı altında yönetin. MentorOS, eğitim kurumunuzun teknoloji altyapısı olur.</p>
+                    
+                    <ul class="space-y-3 text-gray-700 text-lg">
+                        <li class="flex items-center"><i data-lucide="bookmark" class="w-5 h-5 text-secondary mr-3"></i> 'Koltuk' (Seat) Bazlı Kurumsal Lisanslama</li>
+                        <li class="flex items-center"><i data-lucide="tag" class="w-5 h-5 text-secondary mr-3"></i> Beyaz Etiket (White-Label) Çözümleri</li>
+                        <li class="flex items-center"><i data-lucide="user-cog" class="w-5 h-5 text-secondary mr-3"></i> Özel Hesap Yöneticisi ve 7/24 Destek</li>
+                    </ul>
+
+                    <a href="#" class="btn btn-secondary-color mt-6">
+                        Kurumsal Demo Alın
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. Testimonials (Kullanıcı Yorumları) Bölümü -->
+        <section id="yorumlar" class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl lg:text-5xl font-extrabold mb-4">Neden Bize Güveniyorlar?</h2>
+                    <p class="text-xl text-text-secondary max-w-3xl mx-auto">Eğitimcilerin ve kurum yöneticilerinin MentorOS hakkındaki düşünceleri.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Yorum 1 -->
+                    <div class="p-8 bg-gray-50 rounded-xl shadow-lg border border-gray-100">
+                        <div class="flex text-yellow-400 mb-4">
+                            <i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i>
+                        </div>
+                        <blockquote class="text-lg text-text-primary italic">"MentorOS'a geçmeden önce 5 farklı araç kullanıyordum. Artık tüm derslerimi, ödemelerimi ve ödevlerimi tek yerden yönetiyorum. Haftada en az 4-5 saatim bana kaldı."</blockquote>
+                        <div class="mt-6 flex items-center">
+                            <img src="https://placehold.co/40x40/lightgray/gray?text=AY" alt="Ayşe Yılmaz" class="w-10 h-10 rounded-full mr-3"/>
+                            <div>
+                                <p class="font-semibold text-text-primary">Ayşe Yılmaz</p>
+                                <p class="text-sm text-text-secondary">Bağımsız Matematik Eğitmeni</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Yorum 2 -->
+                    <div class="p-8 bg-gray-50 rounded-xl shadow-lg border border-gray-100">
+                        <div class="flex text-yellow-400 mb-4">
+                            <i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i>
+                        </div>
+                        <blockquote class="text-lg text-text-primary italic">"Bizim için en kritik özellik DRM (içerik koruma) oldu. Artık ders kayıtlarımızın çalınmasından korkmuyoruz. Bu, tüm yatırımımızı koruyor."</blockquote>
+                        <div class="mt-6 flex items-center">
+                            <img src="https://placehold.co/40x40/lightgray/gray?text=MK" alt="Mehmet Kaplan" class="w-10 h-10 rounded-full mr-3"/>
+                            <div>
+                                <p class="font-semibold text-text-primary">Mehmet Kaplan</p>
+                                <p class="text-sm text-text-secondary">YKS Kurs Merkezi Yöneticisi</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Yorum 3 -->
+                    <div class="p-8 bg-gray-50 rounded-xl shadow-lg border border-gray-100">
+                        <div class="flex text-yellow-400 mb-4">
+                            <i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i>
+                        </div>
+                        <blockquote class="text-lg text-text-primary italic">"Ödeme altyapısı harika. Öğrencilerim kolayca ödeme yapıyor ve 24 saat içinde hesabıma geçiyor. IBAN ve dekont takibi bitti."</blockquote>
+                        <div class="mt-6 flex items-center">
+                            <img src="https://placehold.co/40x40/lightgray/gray?text=ES" alt="Elif Sönmez" class="w-10 h-10 rounded-full mr-3"/>
+                            <div>
+                                <p class="font-semibold text-text-primary">Elif Sönmez</p>
+                                <p class="text-sm text-text-secondary">Online İngilizce Eğitmeni</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. Final CTA Bölümü -->
+        <section class="py-24 bg-gradient-to-r from-primary to-indigo-700">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+                <h2 class="text-4xl lg:text-5xl font-extrabold mb-6">Eğitimin Geleceğine Bugün Adım Atın.</h2>
+                <p class="text-xl text-indigo-100 mb-10">İdari işleri bize bırakın, siz sadece öğretmeye odaklanın. Kredi kartı gerekmeden ücretsiz başlayın.</p>
+                <a href="#" class="btn bg-white text-primary text-lg px-10 py-4 font-bold shadow-2xl transition-all duration-200 hover:bg-white hover:scale-105">
+                    Hemen Ücretsiz Başla
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- 10. Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
+                <!-- Logo ve Sosyal Medya -->
+                <div class="col-span-2 lg:col-span-2">
+                    <a href="#" class="text-3xl font-extrabold text-white">MentorOS</a>
+                    <p class="mt-4 text-sm max-w-xs">Eğitimciler için Tek İşletim Sistemi. Yönetime değil, eğitime odaklanın.</p>
+                    <div class="flex space-x-5 mt-6">
+                        <a href="#" class="hover:text-white"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                        <a href="#" class="hover:text-white"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                        <a href="#" class="hover:text-white"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+                <!-- Ürün -->
+                <div>
+                    <h4 class="text-sm font-semibold text-gray-200 tracking-wider uppercase">Ürün</h4>
+                    <ul class="mt-4 space-y-3">
+                        <li><a href="#ozellikler" class="hover:text-white transition duration-150">Özellikler</a></li>
+                        <li><a href="#fiyatlandirma" class="hover:text-white transition duration-150">Fiyatlandırma</a></li>
+                        <li><a href="#guvenlik" class="hover:text-white transition duration-150">Güvenlik (DRM)</a></li>
+                        <li><a href="#kurumlar" class="hover:text-white transition duration-150">Kurumlar</a></li>
+                    </ul>
+                </div>
+                <!-- Şirket -->
+                <div>
+                    <h4 class="text-sm font-semibold text-gray-200 tracking-wider uppercase">Şirket</h4>
+                    <ul class="mt-4 space-y-3">
+                        <li><a href="#" class="hover:text-white transition duration-150">Hakkımızda</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-150">Kariyer</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-150">İletişim</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-150">Blog</a></li>
+                    </ul>
+                </div>
+                <!-- Yasal -->
+                <div>
+                    <h4 class="text-sm font-semibold text-gray-200 tracking-wider uppercase">Yasal</h4>
+                    <ul class="mt-4 space-y-3">
+                        <li><a href="#" class="hover:text-white transition duration-150">Gizlilik Politikası</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-150">Kullanım Şartları</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-1S50">KVKK Aydınlatma</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Copyright -->
+            <div class="mt-12 border-t border-gray-700 pt-8 text-center text-sm">
+                <p>&copy; 2025 MentorOS Teknoloji A.Ş. Tüm Hakları Saklıdır.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Script to render Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
